@@ -2,15 +2,39 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 
-st.set_page_config(page_title="SmartWaste AI Classifier")
+# Uncomment below if you have a trained model
+# from tensorflow.keras.models import load_model
 
-st.title("♻️ SmartWaste: AI-Powered Waste Classifier")
-st.write("Upload an image and get a simulated AI classification… Demo version in action.")
+# Set page configuration
+st.set_page_config(page_title="SmartWaste - AI Waste Classifier", layout="centered")
 
-uploaded_file = st.file_uploader("📷 Choose an image...", type=["jpg", "jpeg", "png"])
+# Tabs for navigation
+tab1, tab2 = st.tabs(["📋 About", "🔍 Classifier"])
 
-if uploaded_file:
-    image = Image.open(uploaded_file)
-    st.image(image, use_column_width=True)
-    pred = np.random.choice(["Recyclable", "Organic", "Hazardous"])
-    st.success(f"✅ Category: {pred}")
+# 📋 About Tab
+with tab1:
+    st.title("♻️ SmartWaste - AI-Powered Waste Classifier")
+    st.markdown("""
+**SmartWaste** is an AI-powered web app that helps users classify waste items into categories such as **Recyclable**, **Organic**, and **Hazardous**.  
+It promotes proper waste management and sustainability practices.
+
+---
+
+### 🚀 Features
+- 📤 Upload image of a waste item  
+- 🧠 Get AI-based classification  
+- 📱 Simple, mobile-friendly UI  
+
+---
+
+### 🛠️ Technologies Used
+- Streamlit (for web interface)  
+- TensorFlow/Keras (for AI model - placeholder)  
+- Python  
+
+---
+
+### ▶️ How to Run Locally
+```bash
+pip install -r requirements.txt  
+streamlit run app.py
