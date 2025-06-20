@@ -14,7 +14,8 @@ tab1, tab2 = st.tabs(["📋 About", "🔍 Classifier"])
 # 📋 About Tab
 with tab1:
     st.title("♻️ SmartWaste - AI-Powered Waste Classifier")
-    st.markdown("""
+    st.markdown(
+        """
 **SmartWaste** is an AI-powered web app that helps users classify waste items into categories such as **Recyclable**, **Organic**, and **Hazardous**.  
 It promotes proper waste management and sustainability practices.
 
@@ -35,6 +36,3 @@ It promotes proper waste management and sustainability practices.
 ---
 
 ### ▶️ How to Run Locally
-```bash
-pip install -r requirements.txt  
-streamlit run app.py
