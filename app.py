@@ -1,15 +1,7 @@
 import streamlit as st
-import tensorflow as tf
 import numpy as np
 from PIL import Image
-
-# Load your trained model (replace with your actual model path)
-@st.cache_resource
-def load_model():
-    model = tf.keras.models.load_model('waste_classifier_model.h5')  # Ensure this model is present in root
-    return model
-
-model = load_model()
+import random
 
 # Class names
 class_names = ['Organic', 'Recyclable', 'Hazardous']
@@ -47,15 +39,9 @@ with tab2:
         image = Image.open(uploaded_file)
         st.image(image, caption="Uploaded Waste Image", use_container_width=True)
 
-        # Preprocess image
-        img = image.resize((224, 224))
-        img_array = np.array(img) / 255.0
-        img_array = img_array.reshape(1, 224, 224, 3)
-
-        # Predict
-        prediction = model.predict(img_array)
-        predicted_class = class_names[np.argmax(prediction)]
-
+        # Simulate prediction (remove when real model is added)
+        predicted_class = random.choice(class_names)
+        st.warning("⚠️ AI model not available — using random prediction for demo.")
         st.success(f"🧠 Predicted Category: **{predicted_class}**")
 
 with tab3:
@@ -68,7 +54,6 @@ with tab3:
         ---
         **🔧 Technologies Used:**
         - `Streamlit` for web interface
-        - `TensorFlow/Keras` for AI model
         - `Pillow` for image handling
         - `Python` as core language
 
