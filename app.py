@@ -1,22 +1,16 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
-# TensorFlow import kept for future use or compatibility with video/README
-import tensorflow as tf  
 
 st.set_page_config(page_title="SmartWaste AI Classifier")
 
 st.title("♻️ SmartWaste: AI-Powered Waste Classifier")
-st.write("Upload an image of a waste item, and the AI will classify it as **Recyclable**, **Organic**, or **Hazardous**.")
+st.write("Upload an image and get a simulated AI classification… Demo version in action.")
 
 uploaded_file = st.file_uploader("📷 Choose an image...", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None:
+if uploaded_file:
     image = Image.open(uploaded_file)
-    st.image(image, caption='🖼️ Uploaded Waste Image', use_column_width=True)
-
-    st.write("🔍 Classifying...")
-    # Simulated AI prediction
-    predictions = ["Recyclable", "Organic", "Hazardous"]
-    pred = np.random.choice(predictions)
-    st.success(f"✅ Predicted Waste Category: **{pred}**")
+    st.image(image, use_column_width=True)
+    pred = np.random.choice(["Recyclable", "Organic", "Hazardous"])
+    st.success(f"✅ Category: {pred}")
