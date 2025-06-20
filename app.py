@@ -1,69 +1,103 @@
 import streamlit as st
-from PIL import Image
+import tensorflow as tf
 import numpy as np
+from PIL import Image
 
-# Set page config
-st.set_page_config(page_title="SmartWaste - AI Waste Classifier", layout="centered")
+# Load your trained model (replace with your actual model path)
+@st.cache_resource
+def load_model():
+    model = tf.keras.models.load_model('waste_classifier_model.h5')  # Ensure this model is present in root
+    return model
 
-# Tabs for navigation
-tab1, tab2 = st.tabs(["📋 About", "🔍 Classifier"])
+model = load_model()
 
-# 📋 About Tab
+# Class names
+class_names = ['Organic', 'Recyclable', 'Hazardous']
+
+# App title and sidebar
+st.set_page_config(page_title="SmartWaste AI", layout="centered")
+st.title("♻️ SmartWaste - AI Waste Classifier")
+
+# Tabs for sections
+tab1, tab2, tab3, tab4 = st.tabs(["🏠 Home", "📷 Classify Waste", "ℹ️ About", "📞 Contact"])
+
 with tab1:
-    st.title("♻️ SmartWaste - AI-Powered Waste Classifier")
-
+    st.subheader("Welcome to SmartWaste 🌍")
     st.markdown("""
-**SmartWaste** is an AI-powered web app that helps users classify waste items into categories such as **Recyclable**, **Organic**, and **Hazardous**.  
-It promotes proper waste management and sustainability practices.
+        **SmartWaste** is an AI-powered web app that helps users identify and classify waste items into:
 
----
+        - ♻️ Recyclable  
+        - 🌿 Organic  
+        - ☣️ Hazardous  
 
-### 🚀 Features
-- 📤 Upload image of a waste item  
-- 🧠 Get AI-based classification  
-- 📱 Simple, mobile-friendly UI  
+        Our goal is to **promote sustainability** and **support proper waste management** through technology.
 
----
+        ---
+        **🚀 How it Works:**
+        1. Upload a photo of a waste item
+        2. The AI model classifies it
+        3. Take action based on the result ✅
+    """)
 
-### 🛠️ Technologies Used
-- Streamlit (for web interface)  
-- TensorFlow/Keras (for AI model - placeholder)  
-- Python  
-
----
-
-### ▶️ How to Run Locally
-    pip install -r requirements.txt
-    streamlit run app.py
-
----
-
-### 👨‍💻 Author
-**Usman Abubakar Sahabo**  
-Fellow ID: `FE/23/97913892`  
-#3MTTLearningCommunity #My3MTT
-""")
-
-# 🔍 Classifier Tab
 with tab2:
-    st.title("🧠 Waste Image Classifier")
-    st.write("Upload an image of a waste item to classify it as Recyclable, Organic, or Hazardous.")
-
+    st.header("Upload a Waste Image 🧾")
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-    if uploaded_file:
+    if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_container_width=True)
+        st.image(image, caption="Uploaded Waste Image", use_container_width=True)
 
-        st.write("Classifying...")
+        # Preprocess image
+        img = image.resize((224, 224))
+        img_array = np.array(img) / 255.0
+        img_array = img_array.reshape(1, 224, 224, 3)
 
-        # Dummy prediction
-        classes = ["Recyclable", "Organic", "Hazardous"]
-        prediction = np.random.choice(classes)
+        # Predict
+        prediction = model.predict(img_array)
+        predicted_class = class_names[np.argmax(prediction)]
 
-        st.success(f"🧠 Predicted Class: **{prediction}**")
+        st.success(f"🧠 Predicted Category: **{predicted_class}**")
 
-        # Uncomment when using real model
-        # model = load_model("model.h5")
-        # preprocessed_image = preprocess(image)
-        # prediction = model.predict(preprocessed_image)
+with tab3:
+    st.header("ℹ️ About SmartWaste")
+    st.markdown("""
+        **SmartWaste** is a capstone project developed as part of the **3MTT Learning Community** in Nigeria.
+
+        It uses artificial intelligence to support environmental sustainability by helping users sort waste responsibly.
+
+        ---
+        **🔧 Technologies Used:**
+        - `Streamlit` for web interface
+        - `TensorFlow/Keras` for AI model
+        - `Pillow` for image handling
+        - `Python` as core language
+
+        ---
+        **🛠 How to Run Locally:**
+        ```bash
+        pip install -r requirements.txt
+        streamlit run app.py
+        ```
+
+        **Developer:** Usman Abubakar Sahabo  
+        **Fellow ID:** FE/23/97913892  
+        #3MTTLearningCommunity #My3MTT
+    """)
+
+with tab4:
+    st.header("📞 Contact Developer")
+
+    st.markdown("""
+    **👤 Name:** Usman Abubakar Sahabo  
+    **🆔 Fellow ID:** FE/23/97913892  
+
+    **📧 Email:** [uasahabo@gmail.com](mailto:uasahabo@gmail.com)  
+    **🔗 LinkedIn:** [linkedin.com/in/uasahabo](https://www.linkedin.com/in/uasahabo)  
+    **🐦 X (Twitter):** [@uasahabo](https://twitter.com/uasahabo)  
+
+    _Built with ❤️ for the #3MTTLearningCommunity & 🇳🇬 Nigeria_
+    """)
+
+# Footer
+st.markdown("---")
+st.markdown("<center>© 2025 SmartWaste AI | Powered by Usman A. Sahabo</center>", unsafe_allow_html=True)
